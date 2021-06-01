@@ -1,6 +1,6 @@
-<template>
-    <svg :class="`svg-icon icon-${src}`">
-        <use v-bind="{ 'xlink:href': `${require('@/assets/icons/icons-sprite.svg')}#icon-${src}`}"></use>
+<template functional>
+    <svg :class="`svg-icon icon-${props.src}`">
+        <use v-bind="{ 'xlink:href': `${require('@/assets/icons/icons-sprite.svg')}#icon-${props.src}`}"></use>
     </svg>
 </template>
 <script>

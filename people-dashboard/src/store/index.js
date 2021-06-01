@@ -19,7 +19,7 @@ const actions = {
     },
 };
 
-export const store = {
+export  {
     state,
     getters,
     actions,

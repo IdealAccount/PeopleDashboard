@@ -1,7 +1,7 @@
-import Dashboard from "../page/VDashboard";
+import Dashboard from "../modules/dashboard/pages/VDashboard";
 
-const Profile = () => import("../page/VProfile");
-const NotFound = () => import("../page/static/NotFound");
+const Profile = () => import("../pages/VProfile");
+const NotFound = () => import("../pages/static/NotFound");
 export const routes = [
     {
         path: "/",

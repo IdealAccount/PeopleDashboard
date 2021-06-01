@@ -1,3 +1,4 @@
 export {router} from '../router';
-export {store} from '../store'
+import {store} from "../store";
+window.store = store;
 import "./global-components"

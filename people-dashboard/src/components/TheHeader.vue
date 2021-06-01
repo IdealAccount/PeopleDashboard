@@ -1,8 +1,25 @@
 <template>
     <header class="app-header">
         <div class="auth-controls">
-            <a class="auth-link" href="javascript:void(0)">Sing Up</a>
-            <a class="auth-link" href="javascript:void(0)">Sing In</a>
+            <a v-if="isAuth"
+               class="auth-link"
+               href="javascript:void(0)"
+               @click="logout"
+            >Log Out</a>
+            <template v-else>
+                <a class="auth-link"
+                   href="javascript:void(0)"
+                   @click="register"
+                >
+                    Sing Up
+                </a>
+                <a class="auth-link"
+                   href="javascript:void(0)"
+                   @click.prevent="login"
+                >
+                    Sing In
+                </a>
+            </template>
         </div>
         <div class="user-profile">
             <router-link class="user-profile__avatar"
@@ -14,8 +31,28 @@
 </template>
 
 <script>
+    import {actions, getters} from "../store";
+
     export default {
         name: "VHeader",
+
+        computed: {
+            isAuth() {
+                return getters.isAuthUser
+            }
+        },
+        methods: {
+            // arrow fn in that
+            register() {
+
+            },
+            login() {
+                actions.login('my-token')
+            },
+            logout() {
+                actions.logout()
+            }
+        }
     };
 </script>
 

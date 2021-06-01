@@ -3,7 +3,6 @@
     <TheHeader/>
     <main>
       <router-view />
-      <v-loader/>
     </main>
   </div>
 </template>

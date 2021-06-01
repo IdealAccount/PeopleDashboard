@@ -1,4 +1,4 @@
-<template>
+<template functional>
  <!--   <div class="loader-wrapper">
         <div class="loader">
             <div v-for="n in 8" :key="n" :class="`box box${n}`">
