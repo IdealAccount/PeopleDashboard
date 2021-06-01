@@ -1,17 +1,22 @@
 <template>
-  <div id="app">
-    first init
+  <div class="app-wrap">
+    <TheHeader/>
+    <main>
+      <router-view />
+      <v-loader/>
+    </main>
   </div>
 </template>
-
 <script>
-
-export default {
-  name: "App",
-  components: {},
-};
+  import TheHeader from "./components/TheHeader";
+  export default {
+    name: "App",
+    components: {
+      TheHeader
+    }
+  }
 </script>
 
-<style>
+<style lang="scss">
 
 </style>
