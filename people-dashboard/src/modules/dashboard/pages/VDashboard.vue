@@ -1,26 +1,35 @@
 <template>
     <div class="page-dashboard">
         <div class="grid-container">
-            <dashboard-card v-for="(card) in userList"
+            <v-card v-for="(card) in userList"
                             :key="card.Id"
                             :card="card"
+                            @click="showCard(card)"
+                            @update-card="updateList"
             />
         </div>
+        <transition name="show-in">
+            <popup-modal v-if="selectedCard" @close-popup="closePopup">
+                <v-card :card="selectedCard" @update-card="updateList"/>
+            </popup-modal>
+        </transition>
     </div>
 </template>
 
 <script>
-    import {getters} from "../../../store";
-    import UserList from '../../../stubs/user-list'
+    import {getters} from "@/store";
+    import UserList from '@/stubs/user-list';
 
     export default {
         name: "VDashboard",
         components: {
-            DashboardCard: () => import('../components/card/DashboardCard')
+            'v-card': () => import('../components/card/Card'),
+            PopupModal: () => import('@/modals/PopupModal')
         },
         data() {
             return {
-                userList: UserList
+                userList: UserList,
+                selectedCard: null
             }
         },
         computed: {
@@ -28,8 +37,24 @@
                 return getters.isAuthUser
             }
         },
-        mounted() {
-            console.log(this.userList)
+        methods: {
+            showCard(card) {
+                this.selectedCard = card;
+                document.body.style.overflow = 'hidden';
+            },
+            closePopup() {
+                this.selectedCard = null
+                document.body.style.overflow = '';
+            },
+            updateList(card) {
+                const cardIndex = this.userList.findIndex(el => el.Id === card.Id);
+                this.$set(this.userList, cardIndex, card);
+                if (this.selectedCard) {
+                    this.selectedCard = card;
+                }
+                // this.userList.splice(index, 1, card);
+
+            }
         }
     };
 </script>
@@ -42,5 +67,6 @@
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
         gap: 20px;
+        align-items: flex-start;
     }
 </style>

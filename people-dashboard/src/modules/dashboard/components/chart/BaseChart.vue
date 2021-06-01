@@ -61,19 +61,22 @@
         }
         &-bar {
             display: flex;
-            height: 18px;
-            border-radius: 4px;
+            height: 16px;
+            padding: 2px 4px 2px 0;
+            border-radius: 0 5px 5px 0;
             overflow: hidden;
-            background: #c6c6c6;
+            background: #fff;
+            box-shadow: inset 0 2px 2px rgba(#000, .1),inset 0 -2px 2px rgba(#000, .1);
             &__item {
                 height: 100%;
                 border-radius: 0 5px 5px 0;
                 transform: scaleX(1.04);
+                box-shadow: 1px 0 2px 1px rgba(#000, .15);
             }
         }
         &-box {
             display: grid;
-            grid-template-columns: repeat(4, .3fr);
+            grid-template-columns: repeat(4, .25fr);
             grid-gap: 5px;
         }
     }

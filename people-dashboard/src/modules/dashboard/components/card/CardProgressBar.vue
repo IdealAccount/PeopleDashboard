@@ -4,7 +4,7 @@
             <span>{{label}}</span>
             <span class="">{{prefix}}{{total}}{{postfix}}</span>
         </div>
-        <baseChart :items="items" :total="total" chart-type="bar"/>
+        <baseChart :items="items" :total="maxValue || total" chart-type="bar"/>
     </div>
 </template>
 
@@ -46,8 +46,9 @@
                     }
                 })
             },
+
             total() {
-                return this.maxValue || this.values.map(item => item.Amount).reduce((a, x) => a+x,0)
+                return this.values.map(item => item.Amount).reduce((a, x) => a+x,0)
             }
         }
     }

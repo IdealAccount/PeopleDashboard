@@ -16,8 +16,8 @@
 </script>
 <style lang="scss">
     .svg-icon {
-        width: 2rem;
-        height: 2rem;
+        width: 1em;
+        height: 1em;
         display: inline-block;
         vertical-align: top
     }
