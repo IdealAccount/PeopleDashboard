@@ -2,7 +2,11 @@
   <div class="app-wrap">
     <TheHeader/>
     <main>
-      <router-view />
+      <transition :name="$route.meta.transition" mode="out-in">
+        <keep-alive>
+          <router-view />
+        </keep-alive>
+      </transition>
     </main>
   </div>
 </template>

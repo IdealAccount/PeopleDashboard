@@ -10,11 +10,17 @@ export const routes = [
     {
         path: "/dashboard",
         name: "dashboard",
+        meta: {
+          transition: "slide-out"
+        },
         component: Dashboard
     },
     {
         path: "/profile",
         name: "profile",
+        meta: {
+            transition: "slide-out"
+        },
         component: Profile
     },
     {

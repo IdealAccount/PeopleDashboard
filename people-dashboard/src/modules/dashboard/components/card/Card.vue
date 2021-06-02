@@ -21,33 +21,42 @@
                 <v-icon :src="editingMode ? 'arrow-undo' : 'settings'"/>
             </button>
 
-            <card-settings v-if="editingMode"
-                           :card="card"
-                           @update-card="updateCard"
-                           @cancel="editingMode = false"
-            />
-            <template v-else>
-                <div class="card-header">
-                    <h3 class="card-header__name">{{card.Name}}</h3>
-                    <span class="card-header__title">{{card.Title}}</span>
+            <transition name="fade-out" mode="out-in">
+                <card-settings v-if="editingMode"
+                               :card="card"
+                               @update-card="updateCard"
+                               @cancel="editingMode = false"
+                />
+                <div v-else>
+                    <div class="card-header">
+                        <h3 class="card-header__name">{{card.Name}}</h3>
+                        <span class="card-header__title">{{card.Title}}</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-body__row" v-if="card.Profit">
+                            <card-progress-bar :values="card.Profit" label="Profit" :max-value="1000" prefix="+ $"/>
+                        </div>
+                        <div class="card-body__row" v-if="card.Attention">
+                            <card-progress-bar :values="card.Attention" label="Attention" postfix="h"/>
+                        </div>
+                        <transition name="show-in" mode="out-in">
+                            <div class="card-body__row" v-if="card.Attention && isOpen">
+                                <card-box-chart :values="card.Attention"/>
+                            </div>
+                        </transition>
+                        <button v-if="card.Attention" type="button" :class="['card-body__more', {'is-open': isOpen}]"
+                                @click="isOpen = !isOpen">
+                            <v-icon src="arrow-down"/>
+                        </button>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="card-body__row">
-                        <card-progress-bar :values="card.Profit" label="Profit" :max-value="1000" prefix="+ $"/>
-                    </div>
-                    <div class="card-body__row">
-                        <card-progress-bar :values="card.Attention" label="Attention" postfix="h"/>
-                    </div>
-                    <div class="card-body__row">
-
-                    </div>
-                </div>
-            </template>
+            </transition>
         </div>
     </div>
 </template>
 
 <script>
+    import CardBoxChart from "./CardBoxChart";
     import CardProgressBar from "./CardProgressBar";
     import CardSettings from "./CardSettings";
     import {getters} from "../../../../store";
@@ -56,6 +65,7 @@
         name: "DashboardCard",
         components: {
             CardProgressBar,
+            CardBoxChart,
             CardSettings
         },
         props: {
@@ -67,6 +77,7 @@
         data() {
             return {
                 editingMode: false,
+                isOpen: false,
             }
         },
         computed: {
@@ -99,7 +110,7 @@
         overflow: hidden;
         transition: .2s ease;
         background: #fff;
-        min-width: 300px;
+        min-width: 286px;
         &:hover {
             box-shadow: 0 3px 8px 2px rgba(0, 0, 0, .15);
         }
@@ -139,7 +150,7 @@
         }
         &-inner {
             position: relative;
-            padding: 12px 8px 20px;
+            padding: 12px 8px 6px;
         }
         &-header {
             padding-bottom: 8px;
@@ -156,12 +167,9 @@
             &__name {
                 padding-right: 40px;
                 margin-bottom: 10px;
-
                 font-size: 20px;
                 font-weight: 700;
-
                 color: #58606e;
-
                 line-height: 24px;
                 max-height: 48px;
                 -webkit-line-clamp: 2;
@@ -172,7 +180,6 @@
                 max-height: 57px;
                 -webkit-line-clamp: 3;
             }
-
         }
         &-settings-btn {
             position: absolute;
@@ -203,6 +210,25 @@
         &-body {
             &__row:not(:last-child) {
                 margin-bottom: 22px;
+            }
+            &__more {
+                width: 100%;
+                justify-content: center;
+                align-items: center;
+                font-size: 12px;
+                padding: 4px;
+                border-radius: 5px;
+                background-color: rgba(#989898, .1);
+                transition: .2s ease;
+                &.is-open {
+                    background-color: transparent;
+                    &:hover {
+                        background-color: rgba(#989898, .1);
+                    }
+                    .svg-icon {
+                        transform: rotateX(180deg)
+                    }
+                }
             }
         }
     }

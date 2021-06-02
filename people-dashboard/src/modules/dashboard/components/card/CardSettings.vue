@@ -4,56 +4,76 @@
             <div class="dropdown" v-for="(item, cardIndex) in cardSettings" :key="cardIndex">
                 <div class="dropdown-header">
                     <h3>{{item.field}}</h3>
-                    <button type="button" :class="{'is-open': item.isOpen}" @click.prevent="item.isOpen = !item.isOpen">
+                    <button type="button"
+                            :class="{'is-open': item.isOpen}"
+                            @click.prevent="item.isOpen = !item.isOpen"
+                    >
                         <v-icon src="arrow-down"/>
                     </button>
                 </div>
-                <div class="dropdown-content" v-if="item.isOpen" :key="item.isOpen" :class="{'is-open': item.isOpen}">
-                    <input v-if="['Name', 'Title'].includes(item.field)" type="text" v-model="item.value">
-                    <input type="file" v-if="item.field === 'Photo'">
-                    <template v-if="item.field === 'Tags'">
-                        <select v-model="selectedTag">
-                            <option disabled value="null" style="color: #ccc">Select a tag</option>
-                            <option v-for="(tag, tagIndex) of item.value"
-                                    :key="tagIndex"
-                                    :value="tag"
-                            >
-                                {{tag.Name}}
-                            </option>
-                        </select>
-                        <button class="form-btn primary"
-                                style="margin-top: 10px"
-                                @click.prevent="createTag(item.value)"
-                                v-if="item.value.length < 5"
-                        >
-                            Add tag
-                        </button>
-                        <div class="form__tag-preview" v-if="selectedTag">
-                            <h4 style="margin-bottom: 10px">
-                                Tag
-                                <button type="button" @click="selectedTag = null">
-                                    <v-icon src="close"/>
-                                </button>
-                            </h4>
-                            <label style="margin-bottom: 10px">
-                                <h5>Name</h5>
-                                <input type="text" v-model="selectedTag.Name">
-                            </label>
-                            <label>
-                                <h5>Color</h5>
-                                <input type="text" v-model="selectedTag.Color">
-                            </label>
-                            <div class="form__actions">
-                                <button style="margin-top: 10px" type="button" class="form-btn danger" @click="deleteTag(item.value)">Remove</button>
-                                <button style="margin-top: 10px" type="button" class="form-btn primary" @click="selectedTag = null">Accept</button>
-                            </div>
-                        </div>
-                    </template>
-                </div>
+                <transition name="show-in">
+                    <div class="dropdown-content"
+                         v-if="item.isOpen"
+                         :key="item.isOpen"
+                         :class="{'is-open': item.isOpen}"
+                    >
+                        <input v-if="['Name', 'Title'].includes(item.field)" type="text" v-model="item.value">
+                        <input type="file" v-if="item.field === 'Photo'">
+                        <template v-if="item.field === 'Tags'">
+                            <select v-model="selectedTag">
+                                <option disabled value="null" style="color: #ccc">Select a tag</option>
+                                <option v-for="(tag, tagIndex) of item.value"
+                                        :key="tagIndex"
+                                        :value="tag"
+                                >
+                                    {{tag.Name}}
+                                </option>
+                            </select>
+                            <v-button title="Add+"
+                                      v-if="item.value.length < 5"
+                                      size="xs"
+                                      style="margin-top: 10px;"
+                                      @click.prevent="createTag(item.value)"
+                            />
+                            <transition name="fade-out" mode="out-in">
+                                <div class="form__tag-preview" v-if="selectedTag">
+                                    <h4 style="margin-bottom: 10px">
+                                        Tag
+                                        <button type="button" @click="selectedTag = null">
+                                            <v-icon src="close"/>
+                                        </button>
+                                    </h4>
+                                    <label style="margin-bottom: 10px">
+                                        <h5>Name</h5>
+                                        <input type="text" v-model="selectedTag.Name">
+                                    </label>
+                                    <label>
+                                        <h5>Color</h5>
+                                        <input type="text" v-model="selectedTag.Color">
+                                    </label>
+                                    <div class="form__actions" style="margin-top: 10px">
+                                        <v-button title="Remove"
+                                                  btn-style="danger"
+                                                  size="sm"
+                                                  @click="deleteTag(item.value)"
+                                        />
+                                        <v-button title="Accept"
+                                                  size="sm"
+                                                  @click="selectedTag = null"
+                                        />
+                                    </div>
+                                </div>
+                            </transition>
+                        </template>
+                    </div>
+                </transition>
             </div>
             <div class="form__actions">
-                <button type="button" class="form-btn cancel" @click="$emit('cancel')">Cancel</button>
-                <button class="form-btn primary">Save</button>
+                <v-button title="Cancel"
+                          btn-style="secondary"
+                          @click="$emit('cancel')"
+                />
+                <v-button type="submit" title="Save" style="margin-left: 15px"/>
             </div>
         </form>
     </div>
@@ -111,9 +131,9 @@
             },
             saveChanges() {
                 // Easy way to update the card by mutation
-               /* this.cardSettings.forEach(item => {
-                    this.card[item.field] = item.value;
-                })*/
+                /* this.cardSettings.forEach(item => {
+                     this.card[item.field] = item.value;
+                 })*/
                 this.cardSettings.forEach(item => {
                     this.cardClone[item.field] = item.value
                 })
@@ -129,41 +149,11 @@
         .form {
             display: flex;
             flex-direction: column;
-            &-btn {
-                padding: 8px 20px;
-                font-weight: 500;
-                border-radius: 4px;
-                border: 1px solid transparent;
-                transition: .2s ease;
-                &:hover {
-                    opacity: .6;
-                }
-                &.primary {
-                    background-color: #00bfff;
-                    color: #fff;
-                    &:hover {
-                        border-color: #134760;
-                    }
-                }
-                &.cancel {
-                    color: #989898;
-                    border-color: #989898;
-                }
-                &.danger {
-                    color: #ff000c;
-                    border-color: #ff000c;
-                }
-                &:disabled {
-                    background-color: #cccccc;
-                    pointer-events: none;
-                }
-            }
             h3 {
                 margin-bottom: 4px;
                 cursor: pointer;
             }
             input, select {
-                max-width: 280px;
                 width: 100%;
                 padding: 8px;
                 border: 1px solid #ccc;
@@ -174,6 +164,10 @@
                     border-color: #ffc107;
                     outline: none;
                 }
+            }
+            select {
+                max-width: 280px;
+                margin-right: 20px;
             }
             &__tag-preview {
                 margin-top: 10px;
@@ -198,9 +192,6 @@
                 display: flex;
                 justify-content: flex-end;
                 align-items: center;
-                .cancel {
-                    margin-right: 10px;
-                }
             }
         }
         .dropdown {

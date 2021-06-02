@@ -1,5 +1,5 @@
 <template>
-    <div class="chart">
+    <div class="chart" :class="{'is-box': chartType === 'box'}">
         <div :class="`chart-${chartType}`">
             <template v-if="items">
                 <div class="chart__item" :class="`chart-${chartType}__item`" v-for="(item, index) of indicators"
@@ -12,6 +12,14 @@
                 ></div>
             </template>
         </div>
+        <ul class="chart-items-list" v-if="chartType === 'box'">
+            <li v-for="(item, index) of indicators"
+                :key="index"
+                :style="{backgroundColor: item.color}"
+            >
+                {{item.value}}
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -50,6 +58,9 @@
 <style lang="scss">
     .chart {
         overflow: hidden;
+        &.is-box {
+            display: flex;
+        }
         &__item {
             transition: width .4s ease-in;
         }
@@ -71,13 +82,35 @@
                 height: 100%;
                 border-radius: 0 5px 5px 0;
                 transform: scaleX(1.04);
-                box-shadow: 1px 0 2px 1px rgba(#000, .15);
+                box-shadow: 1px 0 2px 1px rgba(#000, .1);
             }
         }
         &-box {
+            max-width: 80%;
+            width: 100%;
             display: grid;
-            grid-template-columns: repeat(4, .25fr);
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto;
             grid-gap: 5px;
+            box-shadow: 0 0 2px rgba(#cccccc, .8);
+            &__item {
+                height: 50px;
+                border-radius: 4px;
+                &:nth-child(odd) {
+                    justify-self: flex-end;
+                }
+            }
+        }
+        &-items-list {
+            padding: 0 5px;
+            li {
+                padding: 5px;
+                font-size: 14px;
+                font-weight: 700;
+                &:not(:last-child) {
+                    margin-bottom: 2px;
+                }
+            }
         }
     }
 </style>

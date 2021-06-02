@@ -1,24 +1,27 @@
 <template>
     <div class="page-dashboard">
-        <div class="grid-container">
-            <v-card v-for="(card) in userList"
-                            :key="card.Id"
-                            :card="card"
-                            @click="showCard(card)"
-                            @update-card="updateList"
-            />
-        </div>
-        <transition name="show-in">
-            <popup-modal v-if="selectedCard" @close-popup="closePopup">
-                <v-card :card="selectedCard" @update-card="updateList"/>
-            </popup-modal>
-        </transition>
+        <v-loader v-if="loading"/>
+        <template v-else>
+            <div class="grid-container" v-if="userList">
+                <v-card v-for="(user) in userList"
+                        :key="user.Id"
+                        :card="user"
+                        @click="showCard(user.Id)"
+                        @update-card="updateList"
+                />
+            </div>
+            <transition name="fade-out">
+                <popup-modal v-if="isOpen" :loading="!selectedCard" @close-popup="closePopup">
+                    <v-card :card="selectedCard" @update-card="updateList"/>
+                </popup-modal>
+            </transition>
+        </template>
     </div>
 </template>
 
 <script>
     import {getters} from "@/store";
-    import UserList from '@/stubs/user-list';
+    import {api} from "../services";
 
     export default {
         name: "VDashboard",
@@ -28,9 +31,17 @@
         },
         data() {
             return {
-                userList: UserList,
-                selectedCard: null
+                userList: [],
+                isOpen: false,
+                selectedCard: null,
+                loading: false,
             }
+        },
+        created() {
+            this.loading = true;
+            api.getUsers(1, 20).then(data => {
+                this.userList = data;
+            }).finally(() => this.loading = false)
         },
         computed: {
             isAuth() {
@@ -38,12 +49,19 @@
             }
         },
         methods: {
-            showCard(card) {
-                this.selectedCard = card;
+            showCard(userId) {
+                this.isOpen = true;
+                api.getUser(userId).then(data => {
+                    this.selectedCard = data;
+                }).catch(() => {
+                    this.closePopup();
+                    alert('Ошибка')
+                })
                 document.body.style.overflow = 'hidden';
             },
             closePopup() {
-                this.selectedCard = null
+                this.isOpen = false;
+                this.selectedCard = null;
                 document.body.style.overflow = '';
             },
             updateList(card) {
@@ -61,11 +79,15 @@
 
 <style scoped lang="scss">
     .page-dashboard {
-        padding: 20px 12px;
+        padding: 20px 10px;
+        @media (min-width: 768px) {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
     }
     .grid-container {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(286px, 1fr));
         gap: 20px;
         align-items: flex-start;
     }

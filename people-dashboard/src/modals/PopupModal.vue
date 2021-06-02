@@ -1,17 +1,26 @@
 <template>
     <div class="popup">
-        <button type="button" class="popup-close" @click="$emit('close-popup')">
-            <v-icon src="close"/>
-        </button>
         <div class="popup-body">
-            <slot></slot>
+            <button type="button" class="popup-close" @click="$emit('close-popup')">
+                <v-icon src="close"/>
+            </button>
+            <transition name="fade-out">
+                <v-loader v-if="loading"/>
+                <slot v-else></slot>
+            </transition>
         </div>
     </div>
 </template>
 
 <script>
     export default {
-        name: "PopupModal"
+        name: "PopupModal",
+        props: {
+            loading: {
+                type: Boolean,
+                default: () => false
+            }
+        }
     }
 </script>
 
@@ -28,10 +37,20 @@
         align-items: center;
         justify-content: center;
         overflow-y: auto;
+        padding: 0 10px;
+
+        &-body {
+            position: relative;
+            max-width: 550px;
+            min-height: 300px;
+            width: 100%;
+            box-shadow: 0 3px 10px -0.5px rgb(0 0 0 / 20%);
+            max-height: calc(100vh - 100px);
+        }
         &-close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
+            position: fixed;
+            top: 17px;
+            right: 17px;
             padding: 10px;
             background-color: rgba(#fff, .7);
             border-radius: 50%;
@@ -39,12 +58,15 @@
             &:hover {
                 background-color: #fff;
             }
+
         }
-        &-body {
-            max-width: 550px;
-            width: 100%;
-            box-shadow: 0 3px 10px -0.5px rgb(0 0 0 / 20%);
-            max-height: calc(100vh - 100px);
+        @media (min-width: 769px) {
+            &-close {
+                position: absolute;
+                top: 0;
+                right: 0;
+                transform: translate(100%, -100%)
+            }
         }
     }
 </style>
