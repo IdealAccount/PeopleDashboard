@@ -1,6 +1,6 @@
 <template>
     <header class="app-header">
-        <router-link v-if="$route.name === 'profile'" class="route-back" :to="{name: 'dashboard'}">
+        <router-link v-if="$route.meta.prevRoute" class="route-back" :to="{name: 'dashboard'}">
             <v-icon src="arrow-back"/>
         </router-link>
         <div class="navigations">
@@ -40,11 +40,14 @@
 
     export default {
         name: "VHeader",
-
         computed: {
             isAuth() {
                 return getters.isAuthUser
-            }
+            },
+        },
+        beforeRouteEnter(from, to, next) {
+            console.log(from, to, next);
+            next()
         },
         methods: {
             // arrow fn in that

@@ -7,7 +7,7 @@
             ]"
             :type="type"
             v-bind="$attrs"
-            @click="actionHandler"
+            v-on="$listeners"
     >
         <template v-if="title">{{title}}</template>
         <slot v-else></slot>
@@ -40,13 +40,6 @@
                 default: () => ''
             }
         },
-        methods: {
-            actionHandler(event) {
-                console.log(event)
-                const type = this.type === "submit" ? "submit" : "click";
-                this.$emit(type, event);
-            }
-        }
     }
 </script>
 

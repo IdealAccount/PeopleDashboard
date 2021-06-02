@@ -11,7 +11,7 @@ export const routes = [
         path: "/dashboard",
         name: "dashboard",
         meta: {
-          transition: "slide-out"
+            transition: "slide-out"
         },
         component: Dashboard
     },
@@ -19,13 +19,18 @@ export const routes = [
         path: "/profile",
         name: "profile",
         meta: {
-            transition: "slide-out"
+            transition: "slide-out",
+            prevRoute: true
         },
         component: Profile
     },
     {
         path: "*",
         name: "not-found",
+        meta: {
+            transition: "fade-out",
+            prevRoute: true
+        },
         component: NotFound
     }
 ]

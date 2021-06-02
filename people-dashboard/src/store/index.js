@@ -1,4 +1,7 @@
-import Vue from 'vue';
+import Vue from "vue";
+
+const TOKEN_KEY = "user-token";
+
 const state = Vue.observable({
     token: null,
     modals: []
@@ -8,14 +11,26 @@ const getters = {
         return !!state.token;
     },
 };
+
+const mutations = {
+   SET_TOKEN(token) {
+       state.token = token;
+   },
+};
 const actions = {
+    checkToken() {
+       const token = localStorage.getItem(TOKEN_KEY);
+       if(token) {
+           mutations.SET_TOKEN(token);
+       }
+    },
     login(token) {
-        state.token = token;
-        localStorage.setItem("user-token", token);
+        localStorage.setItem(TOKEN_KEY, token);
+        mutations.SET_TOKEN(token)
     },
     logout() {
-        state.token = null;
-        localStorage.removeItem("user-token");
+        localStorage.removeItem(TOKEN_KEY);
+        mutations.SET_TOKEN(null);
     },
 };
 

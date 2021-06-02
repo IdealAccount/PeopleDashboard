@@ -1,73 +1,62 @@
 <template>
     <div class="card-settings">
         <form class="form" @submit.prevent="saveChanges" v-if="cardSettings.length">
-            <div class="dropdown" v-for="(item, cardIndex) in cardSettings" :key="cardIndex">
-                <div class="dropdown-header">
-                    <h3>{{item.field}}</h3>
-                    <button type="button"
-                            :class="{'is-open': item.isOpen}"
-                            @click.prevent="item.isOpen = !item.isOpen"
-                    >
-                        <v-icon src="arrow-down"/>
-                    </button>
-                </div>
-                <transition name="show-in">
-                    <div class="dropdown-content"
-                         v-if="item.isOpen"
-                         :key="item.isOpen"
-                         :class="{'is-open': item.isOpen}"
-                    >
-                        <input v-if="['Name', 'Title'].includes(item.field)" type="text" v-model="item.value">
-                        <input type="file" v-if="item.field === 'Photo'">
-                        <template v-if="item.field === 'Tags'">
-                            <select v-model="selectedTag">
-                                <option disabled value="null" style="color: #ccc">Select a tag</option>
-                                <option v-for="(tag, tagIndex) of item.value"
-                                        :key="tagIndex"
-                                        :value="tag"
-                                >
-                                    {{tag.Name}}
-                                </option>
-                            </select>
-                            <v-button title="Add+"
-                                      v-if="item.value.length < 5"
-                                      size="xs"
-                                      style="margin-top: 10px;"
-                                      @click.prevent="createTag(item.value)"
-                            />
-                            <transition name="fade-out" mode="out-in">
-                                <div class="form__tag-preview" v-if="selectedTag">
-                                    <h4 style="margin-bottom: 10px">
-                                        Tag
-                                        <button type="button" @click="selectedTag = null">
-                                            <v-icon src="close"/>
-                                        </button>
-                                    </h4>
-                                    <label style="margin-bottom: 10px">
-                                        <h5>Name</h5>
-                                        <input type="text" v-model="selectedTag.Name">
-                                    </label>
-                                    <label>
-                                        <h5>Color</h5>
-                                        <input type="text" v-model="selectedTag.Color">
-                                    </label>
-                                    <div class="form__actions" style="margin-top: 10px">
-                                        <v-button title="Remove"
-                                                  btn-style="danger"
-                                                  size="sm"
-                                                  @click="deleteTag(item.value)"
-                                        />
-                                        <v-button title="Accept"
-                                                  size="sm"
-                                                  @click="selectedTag = null"
-                                        />
-                                    </div>
-                                </div>
-                            </transition>
-                        </template>
-                    </div>
-                </transition>
-            </div>
+            <v-accordion v-for="(item, cardIndex) in cardSettings"
+                         :key="cardIndex"
+                         :title="item.field"
+                         :is-opened="!cardIndex && item.isOpen"
+                         style="margin-bottom: 10px"
+                         @toggle="item.isOpen = $event"
+            >
+                <v-input v-if="['Name', 'Title'].includes(item.field)" v-model="item.value"/>
+                <v-input v-if="item.field === 'Photo'" type="file"/>
+                <template v-if="item.field === 'Tags'">
+                    <select v-model="selectedTag">
+                        <option disabled value="null" style="color: #ccc">Select a tag</option>
+                        <option v-for="(tag, tagIndex) of item.value"
+                                :key="tagIndex"
+                                :value="tag"
+                        >
+                            {{tag.Name}}
+                        </option>
+                    </select>
+                    <v-button title="Add+"
+                              v-if="item.value.length < 5"
+                              size="xs"
+                              style="margin-top: 10px;"
+                              @click.prevent="createTag(item.value)"
+                    />
+                    <transition name="fade-out" mode="out-in">
+                        <div class="form__tag-preview" v-if="selectedTag">
+                            <h4 style="margin-bottom: 10px">
+                                Tag
+                                <button type="button" @click="selectedTag = null">
+                                    <v-icon src="close"/>
+                                </button>
+                            </h4>
+                            <label style="margin-bottom: 10px">
+                                <h5>Name</h5>
+                                <v-input v-model="selectedTag.Name"/>
+                            </label>
+                            <label>
+                                <h5>Color</h5>
+                                <v-input v-model="selectedTag.Color"/>
+                            </label>
+                            <div class="form__actions" style="margin-top: 10px">
+                                <v-button title="Remove"
+                                          btn-style="danger"
+                                          size="sm"
+                                          @click="deleteTag(item.value)"
+                                />
+                                <v-button title="Accept"
+                                          size="sm"
+                                          @click="selectedTag = null"
+                                />
+                            </div>
+                        </div>
+                    </transition>
+                </template>
+            </v-accordion>
             <div class="form__actions">
                 <v-button title="Cancel"
                           btn-style="secondary"
@@ -80,9 +69,14 @@
 </template>
 
 <script>
+    import VAccordion from "@/components/VAccordion";
+
     const settings_fields = ['Title', 'Name', 'Photo', 'Tags']
     export default {
         name: "CardSettings",
+        components: {
+            VAccordion,
+        },
         props: {
             card: {
                 type: Object,
@@ -153,8 +147,10 @@
                 margin-bottom: 4px;
                 cursor: pointer;
             }
-            input, select {
+            select {
+                max-width: 280px;
                 width: 100%;
+                margin-right: 20px;
                 padding: 8px;
                 border: 1px solid #ccc;
                 border-radius: 4px;
@@ -164,10 +160,6 @@
                     border-color: #ffc107;
                     outline: none;
                 }
-            }
-            select {
-                max-width: 280px;
-                margin-right: 20px;
             }
             &__tag-preview {
                 margin-top: 10px;
@@ -192,27 +184,6 @@
                 display: flex;
                 justify-content: flex-end;
                 align-items: center;
-            }
-        }
-        .dropdown {
-            padding: 5px;
-            margin-bottom: 10px;
-            border-bottom: 1px solid rgba(55, 55, 55, 0.16);;
-            &-header {
-                display: flex;
-                justify-content: space-between;
-                button {
-                    display: flex;
-                    align-items: center;
-                    padding: 4px;
-                    transition: .2s ease;
-                    &.is-open {
-                        transform: rotateX(-180deg);
-                    }
-                }
-            }
-            &-content {
-                padding: 5px 0;
             }
         }
     }
