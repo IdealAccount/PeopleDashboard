@@ -8,11 +8,12 @@
  Также я обошелся практически без сторонних плагинов и не потому что любитель велосипедов, а для наглядности.
  Я призываю смотреть на данную реализацию, как взятую из контекста среднего приложения.
  Архитектурный подход выбранный мной изначально, я пожелал изменить, в пользу нового опыта.
- В данном подходе я попытался разделить приложение на слои. 
+ В данном подходе я попытался разделить приложение на слои. Cancel changes
  Некоторые компоненты детальные, какие то глупые (например v-form), но все они делались старательно))
  
 ##This text has been translated by google translator 
- Hi!) In this small and simple application, I tried to reveal all my current skills.
+
+  Hi!) In this small and simple application, I tried to reveal all my current skills.
   Perhaps in an effort to show my understanding, I could bend a little.
   So for example, I deliberately abandoned Vuex and implemented its pathetic)) similarity, while for working with a router
   I had to add a couple of pages and also unnecessarily split it into modules.
