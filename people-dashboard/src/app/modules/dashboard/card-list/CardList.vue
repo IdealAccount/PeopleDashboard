@@ -97,12 +97,15 @@
         },
         methods: {
             fetchUserList() {
+                this.filterLoading = true;
                 api.getUsers(this.filterOptions).then(data => {
                     this.userList = data;
                 }).catch(err => {
                     console.log(err,  'error')
                 })
-                 .finally(() => this.loading = false)
+                 .finally(() => {
+                     this.loading = this.filterLoading = false;
+                 })
             },
 
             async showCard(userId) {
@@ -157,13 +160,6 @@
 </script>
 
 <style scoped lang="scss">
-    .page-dashboard {
-        padding: 20px 10px;
-        @media (min-width: 768px) {
-            padding-left: 20px;
-            padding-right: 20px;
-        }
-    }
     .grid-container {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(286px, 1fr));

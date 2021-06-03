@@ -5,7 +5,8 @@ export const profileRoutes = [
         name: "profile",
         meta: {
             transition: "slide-out",
-            prevRoute: true
+            prevRoute: true,
+            permissions: ['auth']
         },
         component: Profile
     },

@@ -87,6 +87,9 @@
             }
         }
         &.info {
+            .left {
+                background-color: #2196f3;
+            }
         }
     }
 </style>

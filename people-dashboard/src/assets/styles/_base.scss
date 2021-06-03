@@ -16,4 +16,9 @@ body {
 main {
   position: relative;
   flex: 1;
+  padding: 20px 10px;
+  @media (min-width: 769px) {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 }

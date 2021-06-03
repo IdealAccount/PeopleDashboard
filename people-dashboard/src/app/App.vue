@@ -1,13 +1,16 @@
 <template>
   <div class="app-wrap">
-    <TheHeader/>
-    <main>
-      <transition :name="$route.meta.transition" mode="out-in">
-        <keep-alive :max="3">
-          <router-view />
-        </keep-alive>
-      </transition>
-    </main>
+    <router-view v-if="$route.meta.full"/>
+    <template v-else>
+      <TheHeader/>
+      <main>
+        <transition :name="$route.meta.transition" mode="out-in">
+          <keep-alive :max="3">
+            <router-view />
+          </keep-alive>
+        </transition>
+      </main>
+    </template>
     <VNotifications/>
     <VModals v-if="modalIsOpen"/>
   </div>
@@ -30,3 +33,6 @@
     }
   }
 </script>
+<style>
+
+</style>

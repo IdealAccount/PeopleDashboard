@@ -1,6 +1,7 @@
 import Vue from "vue";
 import {firebaseApi} from "./shared/services/firebase/firebaseApi";
 import {notify} from "../plugins/notifiy";
+import {router} from "./config";
 
 const TOKEN_KEY = "user-token";
 
@@ -48,19 +49,9 @@ const actions = {
     logout() {
         mutations["CLEAR_STATE"]();
         localStorage.removeItem(TOKEN_KEY);
+        router.replace("/")
+        notify({type: "info", title: "You are logged out"})
     },
-    /*    checkToken() {
-       const token = localStorage.getItem(USER_TOKEN);
-       if (token) {
-           auth.signInWithCustomToken(token)
-               .then(data => {
-                   console.log(data, 'checktoken')
-               })
-               .catch(err => {
-                   console.log(err, 'checktoken')
-               })
-       }
-    },*/
 };
 
 export {
