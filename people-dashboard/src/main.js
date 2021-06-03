@@ -1,14 +1,9 @@
 import "@/assets/styles/main.scss";
 import Vue from "vue";
-import * as config from "./config";
-import {actions} from "./store";
-
+import * as config from "./app/config";
 Vue.config.productionTip = false;
-
-actions.checkToken()
-
 
 new Vue({
   ...config,
-  render: (h) => h(require("./App.vue").default),
+  render: (h) => h(require("./app/App.vue").default),
 }).$mount("#app");
