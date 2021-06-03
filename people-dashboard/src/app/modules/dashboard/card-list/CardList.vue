@@ -100,8 +100,6 @@
                 this.filterLoading = true;
                 api.getUsers(this.filterOptions).then(data => {
                     this.userList = data;
-                }).catch(err => {
-                    console.log(err,  'error')
                 })
                  .finally(() => {
                      this.loading = this.filterLoading = false;

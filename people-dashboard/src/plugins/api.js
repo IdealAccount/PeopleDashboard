@@ -12,6 +12,8 @@ const config = {
 
 const _axios = axios.create(config);
 
+// TODO реализовать обработку ошибок, проверку токена и multipart/form-data
+
 _axios.interceptors.request.use(
     async (config) => {
         // console.log(config, ' request config request')
@@ -27,18 +29,13 @@ _axios.interceptors.request.use(
 _axios.interceptors.response.use(
     (response) => {
         if (response.status !== 200) {
-            console.log(response, 'response')
             // console.log(response)
-            notify({text: response, type: "error", position: "left bottom"})
+            notify({text: response, type: "error"})
             return
         }
         // console.log(response, 'request response')
         return response
-    },
-    (error) => {
-        console.log(error, 'error response')
-        return Promise.reject(error)
-    }
+    },error => Promise.reject(error)
 )
 
 class AxiosPlugin {

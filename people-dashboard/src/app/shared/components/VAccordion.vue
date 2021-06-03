@@ -35,8 +35,7 @@
         },
         watch: {
             isOpened(val) {
-                console.log(val)
-                this.isOpen = this.isOpened
+                this.isOpen = val
             }
         }
     }

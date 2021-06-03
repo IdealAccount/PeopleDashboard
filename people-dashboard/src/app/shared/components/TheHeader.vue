@@ -46,17 +46,10 @@
                 return getters.isAuthenticated
             },
         },
-        beforeRouteEnter(from, to, next) {
-            console.log(from, to, next);
-            next()
-        },
         methods: {
             toAuth(method) {
-                // registration or login
+                // [method] - registration or login
               this.$openModal("Auth", {method})
-                .then(data => {
-                    console.log(data)
-                })
             },
             logout() {
                 actions.logout()

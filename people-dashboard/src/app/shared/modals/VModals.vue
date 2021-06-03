@@ -14,9 +14,6 @@
 
     export default {
         name: "VModals",
-        mounted() {
-            console.log(this.modalList, 'list')
-        },
         computed: {
             modalList() {
                 return getters.modals

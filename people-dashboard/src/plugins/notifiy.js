@@ -12,7 +12,6 @@ export const notify =
          max = 8,
          position = "top right",
      }) => {
-        console.log(position, 'pos')
         return Vue.notify({
             title,
             type,

@@ -18,9 +18,6 @@
                 formData: state.user
             }
         },
-        mounted() {
-            console.log(this.formData, 'form data')
-        }
     }
 </script>
 
