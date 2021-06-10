@@ -1,13 +1,13 @@
 <template>
-    <div class="card">
-        <div class="card-preview"
+    <div class="v-card">
+        <div class="v-card-preview"
              :style="{backgroundImage: `url(${card.Photo})`}"
              @click.stop="showCard"
         >
             <img v-if="!card.Photo"
                  src="http://placehold.it/280x158"
             />
-            <div class="card-preview__tags">
+            <div class="v-card-preview__tags">
                 <div v-for="(tag, index) of card.Tags"
                      :key="index"
                      :style="{backgroundColor: `#${tag.Color}`}"
@@ -16,10 +16,15 @@
                 </div>
             </div>
         </div>
-        <div class="card-inner">
-            <button class="card-settings-btn" v-if="isAuth" @click="toggleEditing">
-                <v-icon :src="editingMode ? 'arrow-undo' : 'settings'"/>
-            </button>
+        <div class="v-card-inner">
+            <!--            <button class="card-settings-btn" v-if="isAuth" @click="toggleEditing">
+                            <v-icon :src="editingMode ? 'arrow-undo' : 'settings'"/>
+                        </button>-->
+            <v-close v-if="isAuth"
+                     class="v-card-settings-btn"
+                     :icon="editingMode ? 'arrow-undo' : 'settings'"
+                     @click="toggleEditing"
+            />
 
             <transition name="fade-out" mode="out-in">
                 <card-settings v-if="editingMode"
@@ -28,23 +33,23 @@
                                @cancel="editingMode = false"
                 />
                 <div v-else>
-                    <div class="card-header">
-                        <h3 class="card-header__name">{{card.Name}}</h3>
-                        <span class="card-header__title">{{card.Title}}</span>
+                    <div class="v-card-header">
+                        <h3 class="v-card-header__name">{{card.Name}}</h3>
+                        <span class="v-card-header__title">{{card.Title}}</span>
                     </div>
-                    <div class="card-body">
-                        <div class="card-body__row" v-if="card.Profit">
+                    <div class="v-card-body">
+                        <div class="v-card-body__row" v-if="card.Profit">
                             <card-progress-bar :values="card.Profit" label="Profit" :max-value="1000" prefix="+ $"/>
                         </div>
-                        <div class="card-body__row" v-if="card.Attention">
+                        <div class="v-card-body__row" v-if="card.Attention">
                             <card-progress-bar :values="card.Attention" label="Attention" postfix="h"/>
                         </div>
                         <transition name="show-in" mode="out-in">
-                            <div class="card-body__row" v-if="card.Attention && isOpen">
+                            <div class="v-card-body__row" v-if="card.Attention && isOpen">
                                 <card-box-chart :values="card.Attention"/>
                             </div>
                         </transition>
-                        <button v-if="card.Attention" type="button" :class="['card-body__more', {'is-open': isOpen}]"
+                        <button v-if="card.Attention" type="button" :class="['v-card-body__more', {'is-open': isOpen}]"
                                 @click="isOpen = !isOpen">
                             <v-icon src="arrow-down"/>
                         </button>
@@ -60,7 +65,6 @@
     import CardProgressBar from "./components/CardProgressBar";
     import CardSettings from "./components/CardSettings";
     import {getters} from "../../../store";
-
     export default {
         name: "DashboardCard",
         components: {
@@ -97,13 +101,11 @@
                 this.editingMode = false;
                 this.$emit('update-card', card)
             }
-
         }
     }
 </script>
-
-<style scoped lang="scss">
-    .card {
+<style lang="scss" scoped>
+    .v-card {
         position: relative;
         box-shadow: 0 0 3px rgba(0, 0, 0, .3);
         border-radius: 6px;

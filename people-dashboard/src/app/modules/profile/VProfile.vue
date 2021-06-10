@@ -1,5 +1,6 @@
 <template>
     <div class="user-profile">
+        <file-upload v-model="formData.photoURL"/>
         <v-form>
             <v-input title="Name" v-model="formData.displayName"/>
             <v-input title="Email" type="email" v-model="formData.email"/>
@@ -10,9 +11,13 @@
 
 <script>
     import {state} from "../../store";
+    import FileUpload from "../../shared/components/FileUpload";
 
     export default {
         name: "VProfile",
+        components: {
+            FileUpload
+        },
         data() {
             return {
                 formData: state.user

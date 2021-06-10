@@ -36,7 +36,7 @@
     }
     .notify-app {
         display: flex;
-        min-height: 50px;
+        min-height: 70px;
         border-radius: 0.5rem;
         box-shadow: 0 4px 6px -1px rgb(0 0 0 / 10%), 0 2px 4px -1px rgb(0 0 0 / 6%);
         margin-bottom: 10px;

@@ -12,9 +12,7 @@ const config = {
 
 const _axios = axios.create(config);
 
-// TODO реализовать обработку ошибок, проверку токена и multipart/form-data
-
-_axios.interceptors.request.use(
+/*_axios.interceptors.request.use(
     async (config) => {
         // console.log(config, ' request config request')
         return config
@@ -23,7 +21,7 @@ _axios.interceptors.request.use(
         // console.log(error, ' request error request')
         return Promise.reject(error)
     }
-)
+)*/
 
 // response interceptor
 _axios.interceptors.response.use(

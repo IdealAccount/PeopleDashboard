@@ -61,7 +61,7 @@
         },
         data() {
             return {
-                pp: 5,
+                pp: 10,
                 page: 1,
                 userList: [],
                 popupIsOpen: false,
@@ -98,7 +98,7 @@
         methods: {
             fetchUserList() {
                 this.filterLoading = true;
-                api.getUsers(this.filterOptions).then(data => {
+                api.getUsers(this.filterOptions).then(({data}) => {
                     this.userList = data;
                 })
                  .finally(() => {
@@ -107,7 +107,8 @@
             },
 
             async showCard(userId) {
-                this.selectedCard = await api.getUser(userId)
+                const {data} = await api.getUser(userId);
+                this.selectedCard = data;
                 this.popupIsOpen = true;
                 document.body.style.overflow = 'hidden';
             },
