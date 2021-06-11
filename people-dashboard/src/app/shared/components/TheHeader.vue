@@ -5,10 +5,10 @@
     </router-link>
     <div class="navigations">
       <div class="auth-controls">
-        <a @click="logout"
+        <a @click="$store.dispatch('logout')"
            class="auth-link"
            href="javascript:void(0)"
-           v-if="isAuth"
+           v-if="$store.getters.isAuthenticated"
         >Log Out</a>
         <template v-else>
           <a @click="toAuth('registration')"
@@ -25,7 +25,7 @@
           </a>
         </template>
       </div>
-      <div class="user-profile" v-if="isAuth">
+      <div class="user-profile" v-if="$store.getters.isAuthenticated">
         <router-link :style="{backgroundImage: `url('${require('@/assets/img/user-profile.jpg')}')`}"
                      :to="{name: 'profile'}"
                      class="user-profile__avatar"
@@ -36,23 +36,14 @@
 </template>
 
 <script>
-  import {actions, getters} from "../../store";
 
   export default {
     name: "VHeader",
-    computed: {
-      isAuth() {
-        return getters.isAuthenticated
-      },
-    },
     methods: {
       toAuth(method) {
         // [method] - registration or login
         this.$openModal("Auth", {method})
       },
-      logout() {
-        actions.logout()
-      }
     }
   };
 </script>

@@ -1,8 +1,11 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import {getters} from "./store";
+import {store} from "./store";
+
 import {dashboardRoutes} from "./modules/dashboard/dashboard-routes";
 import {profileRoutes} from "./modules/profile/profile-routes";
+
+Vue.use(VueRouter);
 
 const routes = [
   {
@@ -29,13 +32,18 @@ const router = new VueRouter({
   routes,
 });
 
-Vue.use(VueRouter);
 
 router.beforeEach((to, from, next) => {
-  if (to.meta?.permissions?.includes('auth') && !getters.isAuthenticated) {
+  if (
+    to.meta?.permissions?.includes('auth')
+    &&
+    !store.getters.isAuthenticated
+  ) {
     return next({name: "dashboard"})
   }
   return next()
 })
 
-export default router
+export {
+  router
+}

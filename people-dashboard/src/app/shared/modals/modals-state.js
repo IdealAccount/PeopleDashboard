@@ -1,41 +1,32 @@
-import Vue from 'vue'
-
-export const state = Vue.observable({
-  modalList: []
-})
-
-export const getters = {
-  get modals() {
-    return state.modalList
+export const modal = {
+  namespaced: true,
+  state: {
+    modals: []
   },
-  get modalIsOpen() {
-    return state.modalList.length >= 1
-  }
-  /*  modalId(modalComponent) {
-        return state.modalList.find(v => v.component === modalComponent).id
-    }*/
-};
-
-export const mutations = {
-  SET_MODAL(modal) {
-    state.modalList.push(modal);
+  getters: {
+    modalIsOpen: state => (state.modals.length >= 1),
+    modalList: state => state.modals
   },
-  CLOSE_MODAL() {
-    state.modalList.pop();
-  }
-};
-
-export const actions = {
-  setModal(modal) {
-    mutations["SET_MODAL"](modal);
-    if (getters["modalIsOpen"]) {
-      document.body.style.overflow = "hidden";
+  mutations: {
+    SET_MODAL(state, modal) {
+      state.modals.push(modal);
+    },
+    CLOSE_MODAL(state) {
+      state.modals.pop();
     }
   },
-  closeModal() {
-    mutations["CLOSE_MODAL"]();
-    if (!getters["modalIsOpen"]) {
-      document.body.style.overflow = "";
+  actions: {
+    setModal({commit, getters}, modal) {
+      commit("SET_MODAL", modal);
+      if (getters["modalIsOpen"]) {
+        document.body.style.overflow = "hidden";
+      }
+    },
+    closeModal({commit, getters}) {
+      commit("CLOSE_MODAL");
+      if (!getters["modalIsOpen"]) {
+        document.body.style.overflow = "";
+      }
     }
-  }
-};
+  },
+}

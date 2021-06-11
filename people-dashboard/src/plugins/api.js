@@ -3,6 +3,7 @@ import axios from "axios";
 import {notify} from "./notifiy";
 
 const config = {
+  // eslint-disable-next-line no-undef
     baseURL: process.env.VUE_APP_API_URL,
     timeout: 30000,
     validateStatus(status) {
@@ -11,27 +12,12 @@ const config = {
 }
 
 const _axios = axios.create(config);
-
-/*_axios.interceptors.request.use(
-    async (config) => {
-        // console.log(config, ' request config request')
-        return config
-    },
-    (error) => {
-        // console.log(error, ' request error request')
-        return Promise.reject(error)
-    }
-)*/
-
-// response interceptor
 _axios.interceptors.response.use(
     (response) => {
         if (response.status !== 200) {
-            // console.log(response)
             notify({text: response, type: "error"})
             return
         }
-        // console.log(response, 'request response')
         return response
     },error => Promise.reject(error)
 )

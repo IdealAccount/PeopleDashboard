@@ -17,13 +17,10 @@
       </div>
     </div>
     <div class="v-card-inner">
-      <!--            <button class="card-settings-btn" v-if="isAuth" @click="toggleEditing">
-                      <v-icon :src="editingMode ? 'arrow-undo' : 'settings'"/>
-                  </button>-->
       <v-close :icon="editingMode ? 'arrow-undo' : 'settings'"
                @click="toggleEditing"
                class="v-card-settings-btn"
-               v-if="isAuth"
+               v-if="$store.getters.isAuthenticated"
       />
 
       <transition mode="out-in" name="fade-out">
@@ -64,7 +61,6 @@
   import CardBoxChart from "./components/CardBoxChart";
   import CardProgressBar from "./components/CardProgressBar";
   import CardSettings from "./components/CardSettings";
-  import {getters} from "../../../store";
 
   export default {
     name: "DashboardCard",
@@ -83,11 +79,6 @@
       return {
         editingMode: false,
         isOpen: false,
-      }
-    },
-    computed: {
-      isAuth() {
-        return getters.isAuthenticated
       }
     },
     methods: {

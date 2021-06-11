@@ -1,10 +1,10 @@
 <template>
   <div class="_modal">
-    <div class="_modal-bg"></div>
+    <div @click="close" class="_modal-bg"></div>
     <div class="_modal-inner">
       <div class="_modal-header">
         <h2 v-if="title">{{title}}</h2>
-        <v-close :size="2.5" @click="$emit('close')"/>
+        <v-close :size="2.5" @click="close"/>
         <slot name="header"/>
       </div>
       <div class="_modal-body">
@@ -21,6 +21,11 @@
     props: {
       title: String,
     },
+    methods: {
+      close() {
+        this.$store.dispatch('modal/closeModal')
+      }
+    }
   }
 </script>
 

@@ -8,6 +8,7 @@
 </template>
 
 <script>
+  // TODO реализовать загрузку изображений с предпросмотром
   export default {
     name: "FileUpload",
     data() {

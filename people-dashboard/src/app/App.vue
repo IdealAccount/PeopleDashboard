@@ -6,21 +6,18 @@
       <main>
         <transition :name="$route.meta.transition" mode="out-in">
           <keep-alive :max="3">
-            <router-view />
+            <router-view/>
           </keep-alive>
         </transition>
       </main>
     </template>
     <VNotifications/>
-    <VModals v-if="modalIsOpen"/>
+    <VModals v-if="$store.getters['modal/modalIsOpen']"/>
   </div>
 </template>
 <script>
   import TheHeader from "./shared/components/TheHeader";
   import VNotifications from "./shared/components/VNotifications";
-
-  import {getters} from "./shared/modals/modals-state";
-
   export default {
     name: "App",
     components: {
@@ -28,9 +25,6 @@
       VNotifications,
       VModals: () => import("./shared/modals/VModals")
     },
-    computed: {
-      modalIsOpen: () => getters.modalIsOpen
-    }
   }
 </script>
 <style>

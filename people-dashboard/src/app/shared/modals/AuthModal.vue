@@ -1,12 +1,22 @@
 <template>
-  <modal-wrapper @close="closeModal">
-    <h2 slot="header" style="text-transform: capitalize">{{method}}</h2>
+  <modal-wrapper>
+    <h2 slot="header" style="text-transform: capitalize">{{authMethod}}</h2>
     <div class="modal-auth">
       <v-form :loading="loading" @submit="formHandler" id="form-auth">
         <transition mode="out-in" name="slide-out">
-          <div :key="method" class="input-group">
-            <v-input :autocomplete="autocompleteField" title="Email" type="email" v-model="email"/>
-            <v-input :autocomplete="autocompleteField" title="Password" type="password" v-model="password"/>
+          <div :key="authMethod" class="input-group">
+            <v-input :autocomplete="isRegister"
+                     title="Email"
+                     type="email"
+                     :placeholder="!isRegister && 'default: mail@mail.ru'"
+                     v-model="email"
+            />
+            <v-input :autocomplete="isRegister"
+                     title="Password"
+                     type="password"
+                     :placeholder="!isRegister && '123456'"
+                     v-model="password"
+            />
           </div>
         </transition>
       </v-form>
@@ -14,11 +24,11 @@
         <v-button :loading="loading" form="form-auth" style="width: 150px" title="Send" type="submit"/>
         <p>
           go to
-          <span @click="method = invertedAuthMethod"
+          <span @click="authMethod = invertedAuthMethod"
                 style="text-transform: capitalize"
           >
-                            {{invertedAuthMethod}}
-                        </span>
+             {{invertedAuthMethod}}
+          </span>
         </p>
       </div>
     </div>
@@ -27,48 +37,46 @@
 
 <script>
   import ModalWrapper from "./ModalWrapper";
-  import {actions} from "../../store";
-  import {modalMixin} from "./modal-mixin";
 
   export default {
     name: "AuthModal",
     components: {
       ModalWrapper
     },
-    mixins: [modalMixin],
+    props: {
+      modalData: {
+        type: Object,
+        required: false,
+      },
+    },
     data() {
       return {
-        method: this.modalData.method,
+        loading: false,
         email: "",
         password: "",
-        loading: false,
+        authMethod: this.modalData.method,
       }
     },
     watch: {
-      method() {
+      authMethod() {
         this.email = '';
         this.password = '';
       }
     },
     computed: {
-      autocompleteField() {
-        return this.method === 'registration' ? 'off' : ''
+      isRegister() {
+        return this.authMethod === 'registration' ? 'off' : ''
       },
       invertedAuthMethod() {
-        return this.method === 'login' ? 'registration' : 'login';
+        return this.authMethod === 'login' ? 'registration' : 'login';
       }
     },
     methods: {
-      async formHandler() {
+      formHandler() {
         this.loading = true
-        actions.auth(this.method, this.email, this.password)
-          .then(() => {
-            this.closeModal()
-          })
-          .catch(() => {
-            this.loading = false
-          })
-
+        this.$store.dispatch('auth', [this.authMethod, this.email, this.password])
+          .then(() => this.$store.dispatch('modal/closeModal'))
+          .catch(() => this.loading = false)
       },
     }
   }

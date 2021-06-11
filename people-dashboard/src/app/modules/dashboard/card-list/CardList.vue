@@ -11,21 +11,32 @@
           <v-form @submit="fetchUserList">
             <div class="form-group" style="margin-bottom: 20px">
               <v-input class="form-input"
+                       min="0"
                        title="Page"
                        type="number"
                        v-model="page"
               />
               <v-input class="form-input"
+                       min="0"
                        title="Per page"
                        type="number"
                        v-model="pp"
               />
             </div>
             <div class="form-group">
-              <v-button :loading="filterLoading" title="Upload" type="submit"/>
-              <v-button @click="resetFilter" btn-style="danger" title="Reset"/>
-              <v-button @click="filterIsOpen = false" btn-style="secondary" style="margin-left: auto"
-                        title="Cancel"/>
+              <v-button :loading="filterLoading"
+                        title="Upload"
+                        type="submit"
+              />
+              <v-button @click="resetFilter"
+                        btn-style="danger"
+                        title="Reset"
+              />
+              <v-button @click="filterIsOpen = false"
+                        btn-style="secondary"
+                        style="margin-left: auto"
+                        title="Cancel"
+              />
             </div>
           </v-form>
         </v-accordion>
@@ -49,7 +60,6 @@
 
 <script>
   import VAccordion from "../../../shared/components/VAccordion";
-  import {getters} from "../../../store";
   import {api} from "../services";
 
   export default {
@@ -79,9 +89,6 @@
       filterOptions: "pushStateOptions"
     },
     computed: {
-      isAuth() {
-        return getters.isAuthenticated
-      },
       filterOptions: {
         get() {
           return {
@@ -96,14 +103,11 @@
       }
     },
     methods: {
-      fetchUserList() {
+      async fetchUserList() {
         this.filterLoading = true;
-        api.getUsers(this.filterOptions).then(({data}) => {
-          this.userList = data;
-        })
-          .finally(() => {
-            this.loading = this.filterLoading = false;
-          })
+        const {data} = await api.getUsers(this.filterOptions)
+        this.userList = data
+        this.loading = this.filterLoading = false;
       },
 
       async showCard(userId) {
@@ -137,10 +141,6 @@
         )
       },
       paramsFromURL() {
-        // Нативный вариант
-        /*    const params = Object.fromEntries(
-                new URL(window.location).searchParams.entries()
-            );*/
         const params = this.$route.query;
         const VALID_URL_KEYS = ['pp', 'page'];
 

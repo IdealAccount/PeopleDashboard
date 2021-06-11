@@ -10,9 +10,7 @@
 </template>
 
 <script>
-  import {state} from "../../store";
   import FileUpload from "../../shared/components/FileUpload";
-
   export default {
     name: "VProfile",
     components: {
@@ -20,12 +18,11 @@
     },
     data() {
       return {
-        formData: state.user
+        formData: {}
       }
+    },
+    created() {
+      this.formData = {...this.$store.state.user}
     },
   }
 </script>
-
-<style scoped>
-
-</style>
